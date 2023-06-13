@@ -1,0 +1,32 @@
+version: '3.1'
+services:
+  django:
+    container_name: django
+    image: josejuh/django
+    restart: always
+    environment:
+      ALLOWED_HOSTS: "*"
+      DJANGO_DB_USER: django_user
+      DJANGO_DB_PASSWORD: django_pass
+      DJANGO_DB_NAME: django
+      DJANGO_DB_HOST: django_mariadb
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_PASSWORD: admin
+      DJANGO_SUPERUSER_EMAIL: admin@example.org
+    ports:
+      - 8082:3000
+    depends_on:
+      - django_db
+  django_db:
+    container_name: django_mariadb
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_DATABASE: django
+      MARIADB_USER: django_user
+      MARIADB_PASSWORD: django_pass
+      MARIADB_ROOT_PASSWORD: root
+    volumes:
+      - django_mariadb_data:/var/lib/mysql
+volumes:
+    django_mariadb_data:
